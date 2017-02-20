@@ -53,8 +53,9 @@ a_1 = [ones(m,1) X];
 
 z_2 = Theta1*a_1';
 a_2 = [ones(1,m); sigmoid(z_2)];
+a_2 = a_2';
 
-z_3 = Theta2*a_2;
+z_3 = Theta2*a_2';
 a_3 = sigmoid(z_3);
 a_3 = a_3';
 J = (1/m)*sum(sum(-yy.*log(a_3)-(1.-yy).*log(1.-a_3))) + ...
@@ -78,10 +79,26 @@ J = (1/m)*sum(sum(-yy.*log(a_3)-(1.-yy).*log(1.-a_3))) + ...
 %               over the training examples if you are implementing it for the 
 %               first time.
 
+Delta = zeros(3,m)
+A_1 = zeros(m,input_layer_size);
+A_2 = zeros(m,hidden_layer_size);
+A_3 = zeros(m,num_labels)
+for i = 1:m
+	aa_1 = [ones(m,1) X(i,:)];
+	A_1(i,:) = aa_1;
+	
+	zz_2 = sigmoid(Theta*aa_1');
+	aa_2 = [ones(1,m), zz_2];
+	A_2(i,:) = aa_2;
 
-
-
-
+	zz_3 = Theta2*aa_2;
+	aa_3 = sigmoius(zz_3);
+	aa_3 = aa_3'
+	A_3(i,:) = aa_3;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	delta_3(i) = A_3(i) - yy(i,:);
+	delta_2 = 
+	
 %
 % Part 3: Implement regularization with the cost function and gradients.
 %
