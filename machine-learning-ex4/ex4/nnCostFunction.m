@@ -82,16 +82,23 @@ A_1 = zeros(m,input_layer_size + 1 );
 A_2 = zeros(m,hidden_layer_size + 1);
 A_3 = zeros(m,num_labels);
 for i = 1:m
-	aa_1 = [ones(1,1) X(i,:)];
-	A_1(i,:) = aa_1;
-	zz_2 = sigmoid(Theta1*aa_1');
-	aa_2 = [ones(1,1); zz_2];
-	A_2(i,:) = aa_2;
+	
+	%aa_1 = [ones(1,1) X(i,:)];
+	%A_1(i,:) = aa_1;
+	%zz_2 = sigmoid(Theta1*aa_1');
+	%aa_2 = [ones(1,1); zz_2];
+	%A_2(i,:) = aa_2;
 
-	zz_3 = Theta2*aa_2;
-	aa_3 = sigmoid(zz_3);
-	aa_3 = aa_3';
-	A_3(i,:) = aa_3;
+	%zz_3 = Theta2*aa_2;
+	%aa_3 = sigmoid(zz_3);
+	%aa_3 = aa_3';
+	%A_3(i,:) = aa_3;
+	a1 = [1;X(i,:)];
+	z2 = sigmoid(Theta1*a1);
+	a2 = [1;z2];
+	z3 = sigmoid(Theta2*a2);
+	
+	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	delta_3 = A_3(i,:) - yy(i,:);
 	delta_2 = (Theta2')*(delta_3') .* (aa_2 .* (ones(size(aa_2)) - aa_2));
