@@ -78,33 +78,17 @@ J = (1/m)*sum(sum(-yy.*log(a_3)-(1.-yy).*log(1.-a_3))) + ...
 %         Hint: We recommend implementing backpropagation using a for-loop
 %               over the training examples if you are implementing it for the 
 %               first time.
-A_1 = zeros(m,input_layer_size + 1 );
-A_2 = zeros(m,hidden_layer_size + 1);
-A_3 = zeros(m,num_labels);
 for i = 1:m
-	
-	%aa_1 = [ones(1,1) X(i,:)];
-	%A_1(i,:) = aa_1;
-	%zz_2 = sigmoid(Theta1*aa_1');
-	%aa_2 = [ones(1,1); zz_2];
-	%A_2(i,:) = aa_2;
-
-	%zz_3 = Theta2*aa_2;
-	%aa_3 = sigmoid(zz_3);
-	%aa_3 = aa_3';
-	%A_3(i,:) = aa_3;
-	a1 = [1;X(i,:)];
+	a1 = [1;X(i,:)'];
 	z2 = sigmoid(Theta1*a1);
 	a2 = [1;z2];
-	z3 = sigmoid(Theta2*a2);
-	
-	
+	z3 = sigmoid(Theta2*a2);	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	delta_3 = A_3(i,:) - yy(i,:);
-	delta_2 = (Theta2')*(delta_3') .* (aa_2 .* (ones(size(aa_2)) - aa_2));
+	delta_3 = z3 - yy(i,:)';
+	delta_2 = (Theta2')*(delta_3) .* (a2 .* (ones(size(a2)) - a2));
 	delta_2 = delta_2(2:end);
-	Theta2_grad = Theta2_grad + delta_3'.*aa_2';
-	Theta1_grad = Theta1_grad + delta_2.*aa_1;
+	Theta2_grad = Theta2_grad + delta_3.*a2';
+        Theta1_grad = Theta1_grad + delta_2.*a1';
 end
 %
 % Part 3: Implement regularization with the cost function and gradients.
@@ -114,10 +98,11 @@ end
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
-Theta2_grad(:,1) = (1/m)*Theta2_grad(:,1);
-Theta2_grad(:,2:end) = (1/m)*Theta2_grad(:,1) + lambda*Theta2(:,2:end);
-Theta1_grad(:,1) = (1/m)*Theta1_grad(:,1);
-Theta1_grad(:,2:end) = (1/m)*Theta1_grad(:,1) + lambda*Theta1(:,2:end);
+Theta1_grad(:,1) = Theta1_grad(:,1)/m;
+Theta2_grad(:,1) = Theta2_grad(:,1)/m;
+Theta1_grad(:,2:end) = Theta1_grad(:,2:end)/m + (lambda/m)*Theta1(:,2:end);
+Theta2_grad(:,2:end) = Theta2_grad(:,2:end)/m + (lambda/m)*Theta2(:,2:end);
+
 
 % -------------------------------------------------------------
 
